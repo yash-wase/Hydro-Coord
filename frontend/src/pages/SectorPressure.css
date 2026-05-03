@@ -1,0 +1,79 @@
+.sp-map-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+}
+.sp-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.sp-map-legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+.sp-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.sp-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.sp-right-panel {
+  display: flex;
+  flex-direction: column;
+}
+.sp-sector-detail {
+  border-left: 3px solid var(--primary);
+}
+.sp-detail-name {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.sp-detail-pressure {
+  font-size: 28px;
+  font-weight: 700;
+}
+.sp-sector-row {
+  display: flex;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background var(--transition);
+  border-radius: var(--radius-sm);
+}
+.sp-sector-row:last-child { border-bottom: none; }
+.sp-sector-row:hover { background: #F8FAFC; }
+.sp-sector-row__id {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 20px;
+}
+.sp-pressure-bar {
+  height: 6px;
+  background: #F1F5F9;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.sp-pressure-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+.sp-pressure-val {
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 32px;
+  text-align: right;
+}

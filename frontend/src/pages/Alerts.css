@@ -1,0 +1,7 @@
+.alerts-status {
+  font-size: 12px;
+  font-weight: 600;
+}
+.alerts-status--active { color: var(--critical); }
+.alerts-status--investigating { color: var(--warning); }
+.alerts-status--resolved { color: var(--normal); }

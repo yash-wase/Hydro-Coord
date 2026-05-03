@@ -1,0 +1,12 @@
+.water-animation {
+  width: 100%;
+  height: 480px;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%);
+  border: 1px solid var(--border);
+}
+.water-animation canvas {
+  display: block;
+}

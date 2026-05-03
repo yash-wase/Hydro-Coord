@@ -1,0 +1,10 @@
+.tanker-status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.tanker-status--available  { background: var(--normal-bg);   color: var(--normal); }
+.tanker-status--route      { background: var(--primary-light); color: var(--primary); }
+.tanker-status--dispatched { background: var(--warning-bg);  color: var(--warning); }

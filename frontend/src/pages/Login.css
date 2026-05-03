@@ -1,0 +1,173 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background — water pipes image */
+.login-bg {
+  position: absolute;
+  inset: 0;
+  background: url('/src/assets/hero_image.jpg') center center / cover no-repeat, linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%);
+  filter: blur(3px) brightness(0.80);
+  transform: scale(1.05);
+  z-index: 0;
+}
+
+/* Dark tint overlay */
+.login-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.38);
+  z-index: 1;
+}
+
+.login-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  animation: fadeInUp 0.6s ease both;
+}
+
+/* Logo above card */
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+/* Main card */
+.login-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.12);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+.login-card__header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.login-card__title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.login-card__sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Role buttons */
+.login-roles {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.login-role-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+}
+.login-role-btn:hover {
+  border-color: var(--role-color);
+  background: var(--role-bg);
+  transform: translateX(3px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.login-role-btn:hover .login-role-btn__arrow {
+  color: var(--role-color);
+  transform: translateX(3px);
+}
+
+.login-role-btn__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.login-role-btn__content {
+  flex: 1;
+}
+.login-role-btn__label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.login-role-btn__desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.login-role-btn__arrow {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.login-card__note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* Back link */
+.login-back {
+  margin: 0;
+}
+.login-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.75);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-family: inherit;
+  padding: 0;
+}
+.login-back-btn:hover { color: #fff; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

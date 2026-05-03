@@ -1,0 +1,138 @@
+.req-public-section { }
+
+.req-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--normal-bg);
+  border: 1px solid var(--normal);
+  border-radius: var(--radius-sm);
+  color: #15803D;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.req-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: #FAFBFC;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 4px;
+}
+.req-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.req-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.req-form__field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.req-form__textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+.req-form__notice {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--critical);
+  background: var(--critical-bg);
+  border: 1px solid #FECACA;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+
+/* Request cards (public view) */
+.req-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.req-card {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+.req-card--emergency { border-left: 3px solid var(--critical); }
+.req-card--suggestion { border-left: 3px solid var(--warning); }
+.req-card__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.req-card__sector {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.req-card__desc {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+}
+.req-card__assigned {
+  font-size: 11px;
+  color: var(--primary);
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* Status badges */
+.req-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.req-status--pending   { background: #FEF2F2; color: var(--critical); }
+.req-status--assigned  { background: var(--primary-light); color: var(--primary); }
+.req-status--review    { background: #FFFBEB; color: var(--warning); }
+.req-status--resolved  { background: var(--normal-bg); color: var(--normal); }
+
+/* Assign modal */
+.req-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.req-modal {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 28px 32px;
+  width: 380px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+  border: 1px solid var(--border);
+}
+.req-modal__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.req-modal__sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+}
