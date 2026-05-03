@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { getRole } from '../../context/AuthContext'
+import sidebarImg from '../../assets/sidebar_img.png'
 import './Sidebar.css'
 
 const allNavItems = [
@@ -77,7 +78,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar__image">
-        <img src="/src/assets/sidebar_img.png" alt="Water delivery" />
+        <img src={sidebarImg} alt="Water delivery" />
       </div>
 
       <div className="sidebar__footer">
