@@ -27,11 +27,16 @@ export default function SectorLayer({ onSectorClick }) {
   const map = useMap();
 
   const fetchPressure = () => {
-    axios
-      .get(`${API_URL}/api/pressure`)
-      .then((res) => setPressureData(res.data))
-      .catch((err) => console.error("Failed to fetch pressure:", err));
-  };
+  console.log("API:", API_URL);  
+
+  axios
+    .get(`${API_URL}/pressure`)
+    .then((res) => {
+      console.log("DATA:", res.data); 
+      setPressureData(res.data);
+    })
+    .catch((err) => console.error("Failed to fetch pressure:", err));
+};
 
   useEffect(() => {
     fetchPressure();
