@@ -1,10 +1,7 @@
 import { GeoJSON, useMap } from "react-leaflet";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import L from "leaflet";
-import axios from "axios";
 import geojson from "../../data/sectors.json";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 function getColor(p) {
   if (p < 30) return "#EF4444";
@@ -12,37 +9,17 @@ function getColor(p) {
   return "#22C55E";
 }
 
-// Compute centroid of a polygon
 function centroid(coords) {
   const pts = coords[0];
   let x = 0, y = 0;
   pts.forEach(([lng, lat]) => { x += lng; y += lat; });
-  return [y / pts.length, x / pts.length]; // [lat, lng]
+  return [y / pts.length, x / pts.length];
 }
 
-export default function SectorLayer({ onSectorClick }) {
-  const [pressureData, setPressureData] = useState({});
+export default function SectorLayer({ pressureData = {}, onSectorClick }) {
   const geoJsonRef = useRef(null);
   const labelsRef = useRef([]);
   const map = useMap();
-
-  const fetchPressure = () => {
-  console.log("API:", API_URL);  
-
-  axios
-    .get(`${API_URL}/pressure`)
-    .then((res) => {
-      console.log("DATA:", res.data); 
-      setPressureData(res.data);
-    })
-    .catch((err) => console.error("Failed to fetch pressure:", err));
-};
-
-  useEffect(() => {
-    fetchPressure();
-    const interval = setInterval(fetchPressure, 30000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Re-style polygons when pressure updates
   useEffect(() => {
@@ -61,7 +38,6 @@ export default function SectorLayer({ onSectorClick }) {
 
   // Render / update pressure labels
   useEffect(() => {
-    // Remove old labels
     labelsRef.current.forEach((m) => m.remove());
     labelsRef.current = [];
 

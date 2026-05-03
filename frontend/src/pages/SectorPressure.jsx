@@ -1,9 +1,7 @@
-﻿import { useEffect, useState } from 'react'
-import axios from 'axios'
+﻿import { useState } from 'react'
+import { useOutletContext } from 'react-router-dom'
 import LeafletMap from '../components/map/LeafletMap'
 import './SectorPressure.css'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000'
 
 function getColor(p) {
   if (p < 30) return 'var(--critical)'
@@ -12,23 +10,11 @@ function getColor(p) {
 }
 
 export default function SectorPressure() {
-  const [pressureData, setPressureData] = useState({})
+  const { pressureData = {} } = useOutletContext() || {}
   const [selectedSector, setSelectedSector] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  const fetchData = () => {
-    axios.get(`${API_URL}/api/pressure`)
-      .then((res) => { setPressureData(res.data); setLoading(false) })
-      .catch(() => setLoading(false))
-  }
-
-  useEffect(() => {
-    fetchData()
-    const interval = setInterval(fetchData, 30000)
-    return () => clearInterval(interval)
-  }, [])
 
   const sectors = Object.entries(pressureData)
+  const loading = sectors.length === 0
   const avg = sectors.length
     ? Math.round(sectors.reduce((a, [, v]) => a + v.pressure, 0) / sectors.length)
     : '--'
@@ -63,13 +49,13 @@ export default function SectorPressure() {
           <div className="stat-card__sub">Refreshes every 30s</div>
         </div>
       </div>
+
       <div className="split-layout">
         <div className="card sp-map-card">
           <div className="sp-map-header">
             <span className="panel-title">Sector Pressure Map</span>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               <span className="badge badge--primary">Live</span>
-              <button className="btn btn--sm" onClick={fetchData}>Refresh</button>
             </div>
           </div>
           <div className="sp-map-legend">
@@ -80,11 +66,12 @@ export default function SectorPressure() {
               <span className="sp-legend-dot" style={{ background: '#F59E0B' }} />Warning (30-69)
             </span>
             <span className="sp-legend-item">
-              <span className="sp-legend-dot" style={{ background: '#EF4444' }} />Critical
+              <span className="sp-legend-dot" style={{ background: '#EF4444' }} />Critical (&lt;30)
             </span>
           </div>
-          <LeafletMap onSectorClick={setSelectedSector} />
+          <LeafletMap onSectorClick={setSelectedSector} pressureData={pressureData} />
         </div>
+
         <div className="sp-right-panel">
           {selectedSector && (
             <div className="card sp-sector-detail" style={{ marginBottom: 12 }}>
@@ -96,15 +83,23 @@ export default function SectorPressure() {
               <div className="sp-detail-pressure" style={{ color: getColor(selectedSector.pressure) }}>
                 {selectedSector.pressure} PSI
               </div>
+              {selectedSector.alert && (
+                <div className="badge badge--critical" style={{ marginTop: 8 }}>
+                  Alert: {selectedSector.alert}
+                </div>
+              )}
             </div>
           )}
+
           <div className="card">
             <div className="panel-header">
               <span className="panel-title">Active Alerts</span>
               <span className="badge badge--critical">{activeAlerts.length}</span>
             </div>
             {activeAlerts.length === 0 && !loading && (
-              <div style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '8px 0' }}>No active alerts</div>
+              <div style={{ fontSize: 13, color: 'var(--text-secondary)', padding: '8px 0' }}>
+                No active alerts
+              </div>
             )}
             {activeAlerts.map(([id, v]) => (
               <div className="alert-item" key={id}>
@@ -116,6 +111,7 @@ export default function SectorPressure() {
               </div>
             ))}
           </div>
+
           <div className="card" style={{ marginTop: 12 }}>
             <div className="panel-header">
               <span className="panel-title">All Sectors</span>
@@ -124,12 +120,26 @@ export default function SectorPressure() {
               <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Loading...</div>
             ) : (
               sectors.map(([id, v]) => (
-                <div key={id} className="sp-sector-row" onClick={() => setSelectedSector({ id, ...v })}>
+                <div
+                  key={id}
+                  className="sp-sector-row"
+                  onClick={() => setSelectedSector({ id, ...v })}
+                >
                   <span className="sp-sector-row__id">{id}</span>
-                  <div className="sp-pressure-bar" style={{ flex: 1, margin: '0 10px' }}>
-                    <div className="sp-pressure-fill" style={{ width: `${v.pressure}%`, background: getColor(v.pressure) }} />
+                  <div style={{ flex: 1, margin: '0 8px' }}>
+                    <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginBottom: 3 }}>
+                      {v.name ? v.name.replace(/^Sector\s+\w+\s*[–-]\s*/i, '') : id}
+                    </div>
+                    <div className="sp-pressure-bar">
+                      <div
+                        className="sp-pressure-fill"
+                        style={{ width: `${v.pressure}%`, background: getColor(v.pressure) }}
+                      />
+                    </div>
                   </div>
-                  <span className="sp-pressure-val" style={{ color: getColor(v.pressure) }}>{v.pressure}</span>
+                  <span className="sp-pressure-val" style={{ color: getColor(v.pressure) }}>
+                    {v.pressure}
+                  </span>
                 </div>
               ))
             )}

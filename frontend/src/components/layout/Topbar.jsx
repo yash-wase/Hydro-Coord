@@ -14,11 +14,17 @@ const pageTitles = {
 const roleLabels = { admin: 'Admin', operator: 'Operator', public: 'Public' }
 const roleColors = { admin: '#2563EB', operator: '#059669', public: '#D97706' }
 
-export default function Topbar() {
+export default function Topbar({ pressureData = {} }) {
   const location = useLocation()
   const navigate = useNavigate()
   const title = pageTitles[location.pathname] || 'Dashboard'
   const role = getRole()
+
+  const sectors = Object.values(pressureData)
+  const avgPSI = sectors.length > 0
+    ? (sectors.reduce((sum, s) => sum + (s.pressure || 0), 0) / sectors.length).toFixed(1)
+    : null
+  const activeAlerts = sectors.filter(s => s.alert).length
 
   const handleLogout = () => {
     sessionStorage.removeItem('hc_role')
@@ -31,6 +37,22 @@ export default function Topbar() {
         <h1 className="topbar__title">{title}</h1>
       </div>
       <div className="topbar__right">
+        {avgPSI !== null && (
+          <>
+            <div className="topbar__stat">
+              <span className="topbar__stat-label">Avg PSI</span>
+              <span className="topbar__stat-value">{avgPSI}</span>
+            </div>
+            <div className="topbar__divider" />
+            <div className="topbar__stat">
+              <span className="topbar__stat-label">Alerts</span>
+              <span className="topbar__stat-value" style={{ color: activeAlerts > 0 ? '#EF4444' : 'var(--normal)' }}>
+                {activeAlerts}
+              </span>
+            </div>
+            <div className="topbar__divider" />
+          </>
+        )}
         <div className="topbar__weather">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2">
             <circle cx="12" cy="12" r="5"/>

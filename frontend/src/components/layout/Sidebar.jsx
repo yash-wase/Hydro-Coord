@@ -39,10 +39,17 @@ const allNavItems = [
 const roleLabels = { admin: 'Admin', operator: 'Operator', public: 'Public' }
 const roleColors = { admin: '#2563EB', operator: '#059669', public: '#D97706' }
 
-export default function Sidebar() {
+function getColor(p) {
+  if (p < 30) return '#EF4444'
+  if (p < 70) return '#F59E0B'
+  return '#22C55E'
+}
+
+export default function Sidebar({ pressureData = {} }) {
   const navigate = useNavigate()
   const role = getRole()
   const navItems = allNavItems.filter(item => !role || item.roles.includes(role))
+  const sectorList = Object.entries(pressureData)
 
   return (
     <aside className="sidebar" id="sidebar">
@@ -76,6 +83,27 @@ export default function Sidebar() {
           </NavLink>
         ))}
       </nav>
+
+      {/* Live sector pressure mini-list */}
+      {sectorList.length > 0 && (
+        <div className="sidebar__sectors">
+          <div className="sidebar__sectors-title">Live Pressure</div>
+          {sectorList.map(([id, v]) => (
+            <div key={id} className="sidebar__sector-row">
+              <span className="sidebar__sector-id">{id}</span>
+              <div className="sidebar__sector-bar">
+                <div
+                  className="sidebar__sector-fill"
+                  style={{ width: `${v.pressure}%`, background: getColor(v.pressure) }}
+                />
+              </div>
+              <span className="sidebar__sector-val" style={{ color: getColor(v.pressure) }}>
+                {v.pressure}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="sidebar__image">
         <img src={sidebarImg} alt="Water delivery" />
