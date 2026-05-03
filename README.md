@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="frontend/src/assets/hero_image.jpg" alt="HydroCoord Banner" width="100%" style="border-radius:12px; max-height:320px; object-fit:cover;" />
+<img src="frontend/src/assets/hero_image.png" alt="HydroCoord Banner" width="100%" style="border-radius:12px; max-height:320px; object-fit:cover;" />
 
 <br/><br/>
 
