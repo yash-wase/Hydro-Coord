@@ -59,8 +59,8 @@ const features = [
 ]
 
 const stats = [
-  { value: '8', label: 'Monitored Sectors' },
-  { value: '2', label: 'Computation Models' },
+  { value: '72', label: 'Monitored Sectors' },
+  { value: '9', label: 'States Covered' },
   { value: '<2s', label: 'Response Time' },
   { value: '99%', label: 'System Uptime' },
 ]

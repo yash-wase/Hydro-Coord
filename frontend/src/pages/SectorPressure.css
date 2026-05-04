@@ -3,6 +3,48 @@
   flex-direction: column;
   min-height: 500px;
 }
+
+/* ── State Selector ── */
+.state-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.state-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  min-width: 100px;
+}
+.state-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+.state-btn--active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+.state-btn__code {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.04em;
+}
+.state-btn__label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-top: 2px;
+}
 .sp-map-header {
   display: flex;
   justify-content: space-between;

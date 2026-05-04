@@ -1,7 +1,7 @@
 import { GeoJSON, useMap } from "react-leaflet";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import L from "leaflet";
-import geojson from "../../data/sectors.json";
+import allGeojson from "../../data/sectors.json";
 
 function getColor(p) {
   if (p < 30) return "#EF4444";
@@ -16,10 +16,34 @@ function centroid(coords) {
   return [y / pts.length, x / pts.length];
 }
 
-export default function SectorLayer({ pressureData = {}, onSectorClick }) {
+// State map centers and zoom levels
+const STATE_VIEW = {
+  MH: { center: [19.2, 75.8], zoom: 6 },
+  RJ: { center: [26.5, 74.5], zoom: 6 },
+  TN: { center: [10.5, 78.5], zoom: 6 },
+  KA: { center: [14.5, 76.5], zoom: 6 },
+  UP: { center: [27.0, 80.5], zoom: 6 },
+};
+
+export default function SectorLayer({ pressureData = {}, onSectorClick, selectedState }) {
   const geoJsonRef = useRef(null);
   const labelsRef = useRef([]);
   const map = useMap();
+
+  // Filter GeoJSON to selected state only
+  const filteredGeojson = useMemo(() => ({
+    type: "FeatureCollection",
+    features: allGeojson.features.filter(
+      f => !selectedState || f.properties.state === selectedState
+    ),
+  }), [selectedState]);
+
+  // Fly map to selected state
+  useEffect(() => {
+    if (!selectedState || !STATE_VIEW[selectedState]) return;
+    const { center, zoom } = STATE_VIEW[selectedState];
+    map.flyTo(center, zoom, { duration: 1.2 });
+  }, [selectedState, map]);
 
   // Re-style polygons when pressure updates
   useEffect(() => {
@@ -31,27 +55,30 @@ export default function SectorLayer({ pressureData = {}, onSectorClick }) {
         fillColor: getColor(p),
         weight: 1.5,
         color: "#475569",
-        fillOpacity: 0.60,
+        fillOpacity: 0.65,
       });
     });
   }, [pressureData]);
 
-  // Render / update pressure labels
+  // Render pressure labels for current state only
   useEffect(() => {
     labelsRef.current.forEach((m) => m.remove());
     labelsRef.current = [];
 
-    geojson.features.forEach((feature) => {
+    filteredGeojson.features.forEach((feature) => {
       const id = feature.properties.id;
       const p = pressureData[id]?.pressure;
-      const label = p !== undefined ? `${p}` : '–';
-      const color = p !== undefined ? getColor(p) : '#64748B';
+      const label = p !== undefined ? `${p}` : "–";
+      const color = p !== undefined ? getColor(p) : "#64748B";
       const [lat, lng] = centroid(feature.geometry.coordinates);
 
       const icon = L.divIcon({
-        className: '',
-        html: `<div style="background:rgba(255,255,255,0.95);border:2px solid ${color};border-radius:6px;padding:3px 7px;font-size:11px;font-weight:700;color:#0F172A;font-family:Inter,sans-serif;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.22);line-height:1.4;text-align:center;pointer-events:none;"><div style="font-size:9px;font-weight:600;color:#475569;letter-spacing:0.04em;margin-bottom:1px">${feature.properties.name.split('–')[1]?.trim() || id}</div><span style="color:#0F172A;font-weight:800">${label} PSI</span></div>`,
-        iconAnchor: [32, 20],
+        className: "",
+        html: `<div style="background:rgba(255,255,255,0.96);border:2px solid ${color};border-radius:6px;padding:3px 7px;font-size:11px;font-weight:700;color:#0F172A;font-family:Inter,sans-serif;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.22);line-height:1.4;text-align:center;pointer-events:none;">
+          <div style="font-size:9px;font-weight:600;color:#475569;letter-spacing:0.04em;margin-bottom:1px">${feature.properties.name}</div>
+          <span style="color:${color};font-weight:800">${label} PSI</span>
+        </div>`,
+        iconAnchor: [36, 22],
       });
 
       const marker = L.marker([lat, lng], { icon, interactive: false });
@@ -63,12 +90,13 @@ export default function SectorLayer({ pressureData = {}, onSectorClick }) {
       labelsRef.current.forEach((m) => m.remove());
       labelsRef.current = [];
     };
-  }, [pressureData, map]);
+  }, [pressureData, filteredGeojson, map]);
 
   return (
     <GeoJSON
+      key={selectedState} // force remount when state changes
       ref={geoJsonRef}
-      data={geojson}
+      data={filteredGeojson}
       style={(feature) => {
         const id = feature.properties.id;
         const p = pressureData[id]?.pressure ?? 50;
@@ -76,7 +104,7 @@ export default function SectorLayer({ pressureData = {}, onSectorClick }) {
           fillColor: getColor(p),
           weight: 1.5,
           color: "#475569",
-          fillOpacity: 0.60,
+          fillOpacity: 0.65,
         };
       }}
       onEachFeature={(feature, layer) => {

@@ -45,11 +45,11 @@ function getColor(p) {
   return '#22C55E'
 }
 
-export default function Sidebar({ pressureData = {} }) {
+export default function Sidebar({ pressureData = {}, selectedState }) {
   const navigate = useNavigate()
   const role = getRole()
   const navItems = allNavItems.filter(item => !role || item.roles.includes(role))
-  const sectorList = Object.entries(pressureData)
+  const sectorList = Object.entries(pressureData).filter(([, v]) => !selectedState || v.state === selectedState)
 
   return (
     <aside className="sidebar" id="sidebar">

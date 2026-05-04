@@ -14,13 +14,15 @@ const pageTitles = {
 const roleLabels = { admin: 'Admin', operator: 'Operator', public: 'Public' }
 const roleColors = { admin: '#2563EB', operator: '#059669', public: '#D97706' }
 
-export default function Topbar({ pressureData = {} }) {
+const STATE_LABELS = { MH: 'Maharashtra', RJ: 'Rajasthan', TN: 'Tamil Nadu', KA: 'Karnataka', UP: 'Uttar Pradesh' }
+
+export default function Topbar({ pressureData = {}, selectedState, setSelectedState }) {
   const location = useLocation()
   const navigate = useNavigate()
   const title = pageTitles[location.pathname] || 'Dashboard'
   const role = getRole()
 
-  const sectors = Object.values(pressureData)
+  const sectors = Object.values(pressureData).filter(s => !selectedState || s.state === selectedState)
   const avgPSI = sectors.length > 0
     ? (sectors.reduce((sum, s) => sum + (s.pressure || 0), 0) / sectors.length).toFixed(1)
     : null
@@ -62,6 +64,20 @@ export default function Topbar({ pressureData = {} }) {
           <span className="topbar__weather-label">Clear</span>
         </div>
         <div className="topbar__divider" />
+        {setSelectedState && (
+          <>
+            <select
+              className="topbar__state-select"
+              value={selectedState}
+              onChange={e => setSelectedState(e.target.value)}
+            >
+              {Object.entries(STATE_LABELS).map(([code, label]) => (
+                <option key={code} value={code}>{label}</option>
+              ))}
+            </select>
+            <div className="topbar__divider" />
+          </>
+        )}
         {role && (
           <div className="topbar__role" style={{ color: roleColors[role] }}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

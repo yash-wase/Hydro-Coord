@@ -92,3 +92,16 @@
   color: var(--text);
   line-height: 1;
 }
+
+.topbar__state-select {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--card);
+  cursor: pointer;
+  font-family: inherit;
+}
+.topbar__state-select:focus { outline: none; border-color: var(--primary); }
